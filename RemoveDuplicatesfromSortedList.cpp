@@ -9,22 +9,33 @@
 //implementation
 class Solution {
 public:
-    ListNode *deleteDuplicates(ListNode *head)
+    ListNode *deleteDuplicates(ListNode *head) 
     {
-        ListNode* p = head;
-        while(p)
+        ListNode *p,*pre_p;
+        ListNode *newhead = new ListNode(0);
+        newhead->next = head;
+        pre_p = newhead,p = head;
+        while(p && p->next)
         {
-        	ListNode* q = p->next;
-        	while(q)
-        	{
-        		if(q->val != p->val)
-        			break;
-        		p->next = q->next;
-        		delete q;
-        		q = p->next;
-        	}
-        	p = q;
+            if(p->next && p->next->val == p->val)
+            {
+                while(p->next && p->next->val == p->val)
+                {
+                    ListNode *tmp = p->next->next;
+                    delete p->next;
+                    p->next = tmp;
+                }
+                pre_p->next = p->next;
+                delete p;
+                p = pre_p->next;
+                continue;
+            }
+            pre_p = p;
+            p = p->next;
+            
         }
+        head = newhead->next;
+        delete newhead;
         return head;
     }
 };
